@@ -1,0 +1,60 @@
+package shop;
+
+import org.springframework.http.HttpStatus;
+
+import java.util.UUID;
+
+public class Item
+{
+    private final String id;
+    private String name;
+    private Integer price;
+
+    Item(String name, int price)
+    {
+        this.name = name;
+        this.price = price;
+        this.id = UUID.randomUUID().toString();
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public Integer getPrice()
+    {
+        return price;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public void setPrice(Integer price)
+    {
+        this.price = price;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void validate()
+    {
+        boolean isNameValid = this.name instanceof String && this.name.length() != 0;
+        boolean isPriceValid = this.price instanceof Integer && this.price >= 0;
+
+        if (!isNameValid)
+        {
+            throw new HttpException(HttpStatus.BAD_REQUEST, "Invalid name");
+        }
+
+        if (!isPriceValid)
+        {
+            throw new HttpException(HttpStatus.BAD_REQUEST, "Invalid price");
+        }
+    }
+}

@@ -1,0 +1,48 @@
+package shop;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+@RestController
+@RequestMapping("/items")
+public class ItemController
+{
+    @Autowired
+    private ItemService itemService;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    void createItem(@RequestBody Item item)
+    {
+        item.validate();
+
+        itemService.save(item);
+    }
+
+    @GetMapping
+    Item[] getAllItems()
+    {
+        return itemService.getAll();
+    }
+
+    @GetMapping("/{itemId}")
+    Item getItemById(@PathVariable("itemId") String itemId)
+    {
+        return itemService.getById(itemId);
+    }
+
+    @PutMapping("/{itemId}")
+    void updateItemById(@PathVariable("itemId") String itemId, @RequestBody Item item)
+    {
+        item.validate();
+
+        itemService.updateById(itemId, item);
+    }
+
+    @DeleteMapping("/{itemId}")
+    void deleteItemById(@PathVariable("itemId") String itemId)
+    {
+        itemService.deleteById(itemId);
+    }
+}
